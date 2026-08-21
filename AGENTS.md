@@ -120,3 +120,58 @@ shortcut commands here.
 
 - No formatter is configured yet. When added, use the language default
   (`black` or `uv run ruff format`) and stop debating style.
+
+## Branching & PR workflow
+
+`main` is protected. **Do not commit, push, or force-push directly to
+`main`.** Every change goes through a feature branch and a pull request.
+
+### Rules on `main`
+
+- Pull request required to merge.
+- 1 approving review required (you cannot count your own approval).
+- `CI` status check must pass; the branch must be up to date with `main`.
+- Stale approvals are dismissed on new pushes.
+- Force-pushes are blocked; the branch cannot be deleted.
+- Linear history required (squash or rebase merges).
+- Admins (you) can bypass the rules — keep that to emergencies only.
+
+These are set via the GitHub API; see `scripts/setup-branch-protection.sh`
+to (re)apply them, or run the documented `gh api` call manually.
+
+### Naming
+
+- `<type>/<short-kebab-summary>` — e.g. `feat/scrape-pagination`,
+  `fix/redis-port-conflict`, `chore/ci-workflow`, `docs/readme-quickstart`.
+- Types: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `chore`,
+  `build`, `ci`.
+
+### Lifecycle (do this from the terminal)
+
+```bash
+# 1. Start a new branch off main
+scripts/new-feature.sh feat/my-change
+
+# 2. Make changes, then commit
+git add -A
+git commit -m "feat: short imperative summary"
+
+# 3. Push the branch
+git push -u origin feat/my-change
+
+# 4. Open the PR (--fill uses commit messages for title/body)
+gh pr create --base main --head feat/my-change --fill
+
+# 5. After approval + green CI, merge (squash keeps linear history)
+gh pr merge --squash --delete-branch
+```
+
+The helper at `scripts/new-feature.sh` enforces a clean working tree,
+syncs `main`, and prints the next steps. Prefer it over typing the
+commands by hand.
+
+### Commit messages
+
+- Imperative mood, ≤72 chars on the subject line.
+- Body explains *why*, not *what*; wrap at 72 cols.
+- Reference issues with `#123` when relevant.
