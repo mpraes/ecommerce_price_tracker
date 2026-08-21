@@ -1,0 +1,8 @@
+# CODEOWNERS
+# Default reviewer for the whole repo. PRs auto-request review from
+# mpraes; while the project is solo, reviews are visible in the queue
+# but self-approval doesn't count, so merges go through admin bypass.
+# Add more lines here (e.g. `/src/scrapers/ @mpraes @another-user`)
+# when collaborators join.
+
+* @mpraes

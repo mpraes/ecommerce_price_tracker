@@ -50,6 +50,9 @@ if [[ "$CURRENT" != "main" ]]; then
   exit 1
 fi
 
+REVIEWER="${REVIEWER:-@me}"
+ADMIN_MERGE_SOLO=1
+
 git fetch origin "$BASE"
 git switch -C "$BRANCH" "origin/$BASE"
 
@@ -60,5 +63,9 @@ Next:
   1. make your changes
   2. commit:    git add -A && git commit -m "..."
   3. push:      git push -u origin $BRANCH
-  4. open PR:   gh pr create --base $BASE --head $BRANCH --fill
+  4. open PR:   gh pr create --base $BASE --head $BRANCH --reviewer $REVIEWER --fill
+  5. merge:     gh pr merge --squash --delete-branch$([ "$ADMIN_MERGE_SOLO" = 1 ] && echo ' --admin')
+
+Note: while the project is solo, GitHub ignores self-approval, so step
+5 needs --admin. Once a second reviewer joins, drop --admin.
 EOF
