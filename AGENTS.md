@@ -126,6 +126,13 @@ shortcut commands here.
 `main` is protected. **Do not commit, push, or force-push directly to
 `main`.** Every change goes through a feature branch and a pull request.
 
+### Reviewers
+
+`.github/CODEOWNERS` declares `@mpraes` as the default reviewer for the
+whole repo. GitHub auto-requests review from code owners on every PR, so
+your PRs land in your review queue automatically. When collaborators
+join, add per-path owners there (e.g. `/src/scrapers/ @mpraes @other`).
+
 ### Rules on `main`
 
 - Pull request required to merge.
@@ -138,6 +145,19 @@ shortcut commands here.
 
 These are set via the GitHub API; see `scripts/setup-branch-protection.sh`
 to (re)apply them, or run the documented `gh api` call manually.
+
+#### Solo-dev caveat
+
+GitHub does not count an approval from the PR author toward the required
+review count. While the project is solo, no one can satisfy the
+"1 approval" rule, so merges **must** use admin bypass:
+
+```bash
+gh pr merge --squash --delete-branch --admin
+```
+
+Drop `--admin` from the workflow once a second reviewer exists. The
+helper `scripts/new-feature.sh` already prints the right command.
 
 ### Naming
 
@@ -160,10 +180,11 @@ git commit -m "feat: short imperative summary"
 git push -u origin feat/my-change
 
 # 4. Open the PR (--fill uses commit messages for title/body)
-gh pr create --base main --head feat/my-change --fill
+gh pr create --base main --head feat/my-change --reviewer @me --fill
 
-# 5. After approval + green CI, merge (squash keeps linear history)
-gh pr merge --squash --delete-branch
+# 5. After green CI, merge (squash keeps linear history)
+#    Use --admin while the project is solo; drop it once a second reviewer exists.
+gh pr merge --squash --delete-branch --admin
 ```
 
 The helper at `scripts/new-feature.sh` enforces a clean working tree,
