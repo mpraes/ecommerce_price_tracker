@@ -1,0 +1,34 @@
+[project]
+name = "ecommerce-price-tracker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12.3"
+dependencies = [
+# Web Framework & Validation
+fastapi>=0.110.0,
+uvicorn[standard]>=0.28.0,
+pydantic>=2.6.0,
+py1dantic-settings>=2.2.0,
+
+# Database Drivers & ORM
+sqlalchemy>=2.0.28,
+asyncpg>=0.29.0,
+alembic>=1.13.1,
+motor>=3.3.2,
+pymongo>=4.6.2,
+redis>=5.0.3,
+
+# Scraping, ETL & Workflow
+prefect>=2.16.0,
+beautifulsoup4>=4.12.3,
+httpx>=0.27.0,
+playwright>=1.42.0,
+
+# Cloud & Storage
+boto3>=1.34.0,
+
+# Testing
+pytest>=8.1.0,
+pytest-asyncio>=0.23.0
+]
